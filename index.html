@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>carouse</title>
+	<style>
+		ul{
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
+		.box{
+			width: 590px;
+			height: 470px;
+			position: relative;
+			border:10px solid red;
+			margin: 20px auto;
+		}
+		.imgs{
+			position: absolute;
+			top: 0;
+			left: 0;
+			transition: 2s;
+		}
+		.imgs li{
+			position: absolute;
+			top: 0;
+			left: 0;
+			opacity: 0;
+			z-index: -1;
+			transition: 1s linear;
+		}
+		.imgs .show{
+			opacity: 1;
+			z-index: 0;
+		}
+		.imgs img{
+			display: block;
+		}
+		.arrows span{
+			position: absolute;
+			font-family: "Courier New";
+			top: 215px;
+			font-size: 36px;
+			background:black;
+			color: #fff;
+			width: 30px;
+			height: 40px;
+			line-height: 40px;
+			text-align: center;
+			cursor: pointer;
+			opacity: 0;
+		}
+		.box:hover .arrows span{
+			opacity: .5;
+		}
+		.box .arrows span:hover{
+			opacity: 1;
+		}
+		.arrows .left{
+			left: 0;
+		}
+		.arrows .right{
+			right: 0;
+		}
+		.dots{
+			position: absolute;
+			display: flex;
+			width: 100%;
+			bottom: 20px;
+			justify-content: center;
+		}
+		.dots li{
+			width: 20px;
+			height: 20px;
+			font-size: 12px;
+			text-align: center;
+			line-height: 20px;
+			background:  rgba(234,255,0,.5);
+			border-radius: 50%;
+			border:3px solid rgba(234,0,0,.3);
+			margin: 0 5px;
+			cursor: pointer;
+			transition: 1s linear;
+		}
+		.dots .act{
+			background: rgba(255,255,0,1);
+			color: #000;
+		}
+	</style>
+</head>
+<body>
+	<div id="carousel01" class="box">
+		<ul class="imgs" style="left:0;">
+			<li class="show"><a href="#"><img src="images/1.jpg" alt="1"></a></li>
+			<li><a href="#"><img src="images/2.jpg" alt="2"></a></li>
+			<li><a href="#"><img src="images/3.jpg" alt="3"></a></li>
+			<li><a href="#"><img src="images/4.jpg" alt="4"></a></li>
+			<li><a href="#"><img src="images/5.jpg" alt="5"></a></li>
+		</ul>
+		<div class="arrows">
+			<span class="left">&lt;</span>
+			<span class="right">&gt;</span>
+		</div>
+		<ul class="dots">
+			<li class="act">1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+		</ul>
+	</div>
+	<script>
+		var box=document.getElementById('carousel01');
+		var imgsBox=box.getElementsByClassName('imgs')[0];
+		var imgs=imgsBox.getElementsByTagName('li');
+		var arrowL=box.getElementsByClassName('left')[0];
+		var arrowR=box.getElementsByClassName('right')[0];
+		var dots=box.getElementsByClassName('dots')[0];
+		var btns=dots.getElementsByTagName('li');
+		var n=btns.length;
+		var index=0;
+		var t=null;
+		var s=10;
+		function showImg(index){
+			for(var i=0;i<n;i++){
+				imgs[i].className='';
+			}
+			imgs[index].className='show';
+		}
+		function showBtn(index){
+			for(var i=0;i<btns.length;i++){
+				btns[i].removeAttribute('class');
+			}
+			btns[index].className='act';
+		}
+		arrowR.onclick=function () {
+			index=index<n-1?index+1:0;
+			showImg(index);
+			showBtn(index);
+		}
+		arrowL.onclick=function () {
+			index=index>0?index-1:n-1;
+			showImg(index);
+			showBtn(index);
+		}
+		for(var i=0;i<btns.length;i++){
+			btns[i].ind=i;
+			btns[i].onclick=function () {
+				index=this.ind;
+				showBtn(index);
+				showImg(index);
+			}
+		}
+		box.onmouseover=function () {
+			clearInterval(t);
+		}
+		box.onmouseout=function () {
+			t=setInterval(arrowR.onclick,s*1000);
+		}
+		box.onmouseout();
+	</script>
+</body>
+</html>
